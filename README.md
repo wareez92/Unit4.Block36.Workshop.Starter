@@ -28,7 +28,7 @@ npm run dev
 cd client && npm run build
 ```
 
-browse to localhost:3000 (or whatever server port you used)
+browse to localhost:3000 (or whatever server port is being used for your express application)
 
 # to deploy
 - build script for deploy
@@ -50,5 +50,3 @@ node server/index.js
 JWT for jwt secret
 DATABASE_URL for postgres database
 ```
-
-- environment variables for deployed site
