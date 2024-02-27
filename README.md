@@ -34,7 +34,7 @@ browse to localhost:3000 (or whatever server port is being used for your express
 - build script for deploy
 
 ```
-npm install && cd client && npm run build
+npm install && cd client && npm install && npm run build
 
 ```
 - start script for deploy 
