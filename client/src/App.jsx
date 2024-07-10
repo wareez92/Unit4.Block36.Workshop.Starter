@@ -13,12 +13,12 @@ const Login = ({ login }) => {
       <input
         value={username}
         placeholder="username"
-        onChange={(ev) => setUsername(ev.target.value)}
+        onChange={(event) => setUsername(event.target.value)}
       />
       <input
         value={password}
         placeholder="password"
-        onChange={(ev) => setPassword(ev.target.value)}
+        onChange={(event) => setPassword(event.target.value)}
       />
       <button disabled={!username || !password}>Login</button>
     </form>
@@ -37,13 +37,14 @@ function App() {
   const attemptLoginWithToken = async () => {
     const token = window.localStorage.getItem("token");
     if (token) {
-      const response = await fetch("/api/auth/me", {
+      const response = await fetch(`/api/auth/me`, {
         headers: {
-          authorization: token
+          "Content-Type":"application/json",
+          authorization: `Bearer ${token}`,
         },
       });
-      const json = await response.json();
       if (response.ok) {
+        const json = await response.json();
         setAuth(json);
       } else {
         window.localStorage.removeItem("token");
@@ -63,14 +64,17 @@ function App() {
 
   useEffect(() => {
     const fetchFavorites = async () => {
-      const response = await fetch(`/api/users/${auth.id}/favorites`, {
-        headers: {
-          authorization: window.localStorage.getItem("token"),
-        },
-      });
-      const json = await response.json();
-      if (response.ok) {
-        setFavorites(json);
+      const token = window.localStorage.getItem("token");
+      if (token) {
+        const response = await fetch(`/api/users/${auth.id}/favorites`, {
+          headers: {
+            authorization: window.localStorage.getItem("token"),
+          },
+        });
+        if (response.ok) {
+          const json = await response.json();
+          setFavorites(json);
+        }
       }
     };
     if (auth.id) {
@@ -86,11 +90,11 @@ function App() {
       body: JSON.stringify(credentials),
       headers: {
         "Content-Type": "application/json",
-      }
+      },
     });
 
-    const json = await response.json();
     if (response.ok) {
+      const json = await response.json();
       window.localStorage.setItem("token", json.token);
       attemptLoginWithToken();
     }
